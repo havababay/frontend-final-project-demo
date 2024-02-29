@@ -1,0 +1,9 @@
+<h1>Meet Our Team</h1>
+<div class="person-container">
+    <div *ngFor="let p of allPersons" class="person-card">
+        <div>{{ p.fullName() }}</div>
+        <div *ngIf="p.age">
+            {{ p.age }}
+        </div>
+    </div>
+</div>
