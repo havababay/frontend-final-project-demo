@@ -1,0 +1,11 @@
+.task-container {
+  display: flex;
+}
+
+.task-selection-container {
+  margin : 8px;
+}
+
+.task-details-container {
+  margin : 8px;
+}
