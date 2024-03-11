@@ -21,7 +21,16 @@
     </div>
 </div>
 <div>
-    <button mat-flat-button color="primary">
+    <button mat-flat-button 
+        color="primary"
+        (click)="generateRandomTeam()"
+        [disabled]="!selectedTask">
         Assign Team
     </button>
+</div>
+<div>
+    <app-person-card 
+        *ngFor="let randomPerson of randomTeam" 
+        [currentPerson]="randomPerson">
+    </app-person-card>
 </div>
