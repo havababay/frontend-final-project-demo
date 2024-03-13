@@ -1,3 +1,18 @@
 .card-container {
   min-height: 68px;
 }
+
+.age-young {
+  font-size: 14px;
+  color: green;
+}
+
+.age-adult {
+  font-size: 16px;
+  color: blue;
+}
+
+.age-senior {
+  font-size: 18px;
+  color: red;
+}

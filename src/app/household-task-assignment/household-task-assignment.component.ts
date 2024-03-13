@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Person } from '../shared/model/person';
 import { PersonsService } from '../services/persons.service';
 import { PersonCardComponent } from '../person-card/person-card.component';
+import { TaskDuration } from '../shared/model/task-duration';
 
 @Component({
   selector: 'app-household-task-assignment',
@@ -41,5 +42,18 @@ export class HouseholdTaskAssignmentComponent implements OnInit {
       [...this.allPerons].sort(() => Math.random() - 0.5);
 
     this.randomTeam = shuffledPersons.splice(0,5);
+  }
+
+  getDurationStyle() : string {
+    switch (this.selectedTask?.duration) {
+      case TaskDuration.SHORT:
+        return "task-short";
+      case TaskDuration.MEDIUM:
+        return 'task-medium'
+      case TaskDuration.LONG:
+        return 'task-long'
+      default:
+        return '';
+    }
   }
 }

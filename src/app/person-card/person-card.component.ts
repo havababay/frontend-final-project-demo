@@ -16,4 +16,17 @@ import { MatCardModule } from '@angular/material/card';
 export class PersonCardComponent { 
   @Input()
   currentPerson? : Person;
+
+  getAgeStyle() : string {
+    if (!this.currentPerson?.age) {
+      return '';
+    } else if (this.currentPerson?.age < 18) {
+      return 'age-young';
+    } else if (this.currentPerson?.age >= 18 && 
+      this.currentPerson?.age < 40) {
+      return 'age-adult';
+    } else {
+      return 'age-senior';
+    }
+  }
 }

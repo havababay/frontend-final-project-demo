@@ -3,8 +3,13 @@
         {{ currentPerson?.fullName() }}
     </mat-card-title>
     <mat-card-content>
-        <div *ngIf="currentPerson?.age">
+        <div 
+            *ngIf="currentPerson?.age" 
+            [ngClass]="getAgeStyle()">
             Age: {{ currentPerson?.age }}
+        </div>
+        <div *ngIf="!currentPerson?.age">
+            N/A
         </div>
     </mat-card-content>
 </mat-card>
