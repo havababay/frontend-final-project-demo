@@ -1,9 +1,0 @@
-.summary-container {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.fruit-summary {
-  border:1px solid black;
-  flex-grow: 1;
-}
