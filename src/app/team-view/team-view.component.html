@@ -1,0 +1,7 @@
+<h1>Meet Our Team</h1>
+<div class="team-view-container">
+    <div *ngFor="let p of allPersons" class="person-card">
+        <app-person-card [currentPerson]="p"
+            [routerLink]="['/person', p.id]"></app-person-card>
+    </div>
+</div>
