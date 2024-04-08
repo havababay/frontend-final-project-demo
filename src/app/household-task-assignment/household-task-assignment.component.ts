@@ -38,7 +38,7 @@ export class HouseholdTaskAssignmentComponent implements OnInit {
   }
 
   generateRandomTeam() {
-    let shuffledPersons = 
+    const shuffledPersons = 
       [...this.allPerons].sort(() => Math.random() - 0.5);
 
     this.randomTeam = shuffledPersons.splice(0,5);
