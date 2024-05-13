@@ -1,0 +1,9 @@
+<div>
+  <app-timer
+    [maxDuration]="100"
+    (reportDuration)="handleDurationChange($event)"
+  >
+  </app-timer>
+</div>
+<div>Parent time: {{ duration }}</div>
+<div>Duration message: {{ durationMessage }}</div>
