@@ -8,54 +8,48 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-timer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './timer.component.html',
   styleUrl: './timer.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimerComponent implements OnInit, OnDestroy {
-  @Input()
-  maxDuration = 0;
-
-  durationSoFar = 0;
-
   @Output()
-  reportDuration = new EventEmitter<number>();
+  timerColorChange = new EventEmitter<string>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   timer?: any;
 
+  private readonly background: string[] = [
+    'red',
+    'blue',
+    'purple',
+  ];
+
+  currentColor = 'red'
+
   ngOnInit(): void {
-    this.timer = setInterval(() => this.increaseInterval(), 1000);
+    this.timer = setInterval(() => this.changeColor(), 1000);
   }
 
-  increaseInterval() {
+  changeColor() {
     {
-      ++this.durationSoFar;
-
-      if (this.durationSoFar == this.maxDuration) {
-        clearInterval(this.timer);
-      } else {
-        if (this.reportDuration) {
-          this.reportDuration.emit(this.durationSoFar);
-        }
-      }
+      const randomColorIndex = Math.floor(this.background.length * Math.random());
+      this.currentColor = this.background[randomColorIndex];
+      this.timerColorChange.emit(this.currentColor);
     }
+  }
+
+  stopChangingColor() {
+    clearInterval(this.timer);
   }
 
   ngOnDestroy(): void {
     clearInterval(this.timer);
-  }
-
-  formatSecondsToMMSS(totalSeconds: number): string {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    const formattedMinutes = minutes.toString().padStart(2, '0');
-    const formattedSeconds = seconds.toString().padStart(2, '0');
-    return `${formattedMinutes}:${formattedSeconds}`;
   }
 }

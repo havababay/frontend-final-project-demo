@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TimerComponent } from '../timer/timer.component';
+import { calcProjectFileAndBasePath } from '@angular/compiler-cli';
 
 @Component({
   selector: 'app-timer-container',
@@ -11,18 +12,9 @@ import { TimerComponent } from '../timer/timer.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimerContainerComponent {
-  duration = 0;
-  durationMessage = '';
+  currentColor = '';
 
-  private readonly messages: string[] = [
-    'Hello, world!',
-    'Keep coding!',
-    'Stay curious!',
-  ];
-
-  handleDurationChange(seconds : number) {
-    this.duration = seconds;
-    const messageIndex = this.duration % this.messages.length;
-    this.durationMessage = this.messages[messageIndex];
+  handleColorChange(color : string) {
+    this.currentColor = color;
   }
 }

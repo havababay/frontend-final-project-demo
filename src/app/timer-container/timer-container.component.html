@@ -1,9 +1,6 @@
 <div>
   <app-timer
-    [maxDuration]="100"
-    (reportDuration)="handleDurationChange($event)"
-  >
+    (timerColorChange)="handleColorChange($event)">
   </app-timer>
 </div>
-<div>Parent time: {{ duration }}</div>
-<div>Duration message: {{ durationMessage }}</div>
+<div>Current color: {{ currentColor }}</div>
