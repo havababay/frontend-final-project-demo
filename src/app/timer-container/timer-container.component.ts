@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TimerComponent } from '../timer/timer.component';
-import { calcProjectFileAndBasePath } from '@angular/compiler-cli';
 
 @Component({
   selector: 'app-timer-container',
