@@ -21,7 +21,9 @@ export class TeamViewComponent implements OnInit {
   constructor(private personService : PersonsService, private router : Router) {}
 
   ngOnInit(): void {
-    this.allPersons = this.personService.list();
+    this.personService
+      .list()
+      .then((result: Person[]) => (this.allPersons = result));
   }
 
   personClicked(p : Person) : void {

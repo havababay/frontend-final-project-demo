@@ -1,6 +1,6 @@
 import { PersonsService } from '../services/persons.service';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgModelGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 import { PhoneNumber } from '../shared/model/phone-number';
 import { PhoneType } from '../shared/model/phone-type';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @Component({
   selector: 'app-person-form',
@@ -20,14 +22,15 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './person-form.component.html',
   styleUrl: './person-form.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonFormComponent implements OnInit { 
-  currentPerson: Person = new Person(0,'','','');
+  currentPerson: Person = new Person('','','','');
   @ViewChild('phoneGroup') phoneGroup? : NgModelGroup;
 
   @Input()
@@ -37,22 +40,25 @@ export class PersonFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.id) {
-      const personFromService = this.personService.get(parseInt(this.id));
-
-      if (personFromService) {
-        this.currentPerson = personFromService;
-      }
+      this.personService.get(this.id).then(
+        (personFromService) => {
+          if (personFromService) {
+            this.currentPerson = personFromService;
+          }
+        }
+      );
     }
   }
 
   onSubmitRegistration() {
-    console.log("Form submitted!");
     if (this.id) {
       this.personService.update(this.currentPerson);
+      this.router.navigate(['']);
     } else {
-      this.personService.add(this.currentPerson)
+      this.personService.add(this.currentPerson).then(
+        () => this.router.navigate([''])
+      );
     }
-    this.router.navigate(['']);
   }
 
   addPhoneNumber() {

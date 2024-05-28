@@ -1,76 +1,78 @@
 import { Injectable } from '@angular/core';
 import { Person } from '../shared/model/person';
+import {
+  DocumentSnapshot,
+  Firestore,
+  QuerySnapshot,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from '@angular/fire/firestore';
+import { personConverter } from './converters/persons-converter';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PersonsService {
-  private readonly NEXT_ID_KEY = "nextId";
-  private readonly PERSON_KEY = "persons";
+  constructor(private firestoreService: Firestore) {}
 
-  constructor() { }
+  async list(): Promise<Person[]> {
+    const collectionConnection = collection(
+      this.firestoreService,
+      'people'
+    ).withConverter(personConverter);
 
-  private getNextId() : number {
-    const nextIdString = localStorage.getItem(this.NEXT_ID_KEY);
+    const querySnapshot: QuerySnapshot<Person> = await getDocs(
+      collectionConnection
+    );
 
-    return nextIdString ? parseInt(nextIdString) : 0;
+    const result: Person[] = [];
+
+    querySnapshot.docs.forEach((docSnap: DocumentSnapshot<Person>) => {
+      const data = docSnap.data();
+      if (data) {
+        result.push(data);
+      }
+    });
+
+    return result;
   }
 
-  private setNextId(id : number) {
-    localStorage.setItem(this.NEXT_ID_KEY, id.toString());
+  async get(id: string): Promise<Person | undefined> {
+    const personDocRef = doc(this.firestoreService, 'people', id).withConverter(
+      personConverter
+    );
+    return (await getDoc(personDocRef)).data();
   }
 
-  private setPersons(allPersons : Map<number, Person>) {
-    localStorage.setItem(this.PERSON_KEY,
-      JSON.stringify(Array.from(allPersons.values())));
+  async add(newPersonData: Person) {
+    await addDoc(
+      collection(this.firestoreService, 'people').withConverter(
+        personConverter
+      ),
+      newPersonData
+    );
   }
 
-  private getPersons() : Map<number, Person> {
-    const personString = localStorage.getItem(this.PERSON_KEY);
-    const idToPerson = new Map<number, Person>();
-
-    if (personString) {
-      JSON.parse(personString).forEach((person : Person) => {
-        Object.setPrototypeOf(person, Person.prototype)
-        idToPerson.set(person.id, person);
-      });
-    }
-
-    return idToPerson;
+  async update(existingPerson: Person): Promise<void> {
+    const personDocRef = doc(
+      this.firestoreService,
+      'people',
+      existingPerson.id
+    ).withConverter(personConverter);
+    return setDoc(personDocRef, existingPerson);
   }
 
-  list() : Person[] {
-    return Array.from(this.getPersons().values());
-  }
-
-  get(id : number) : Person | undefined {
-    return this.getPersons().get(id);
-  }
-
-  add(newPersonData:Person) {
-    let nextId = this.getNextId();
-    newPersonData.id = nextId
-
-    const personsData = this.getPersons();
-    personsData.set(nextId, newPersonData);
-    this.setPersons(personsData);
-
-    this.setNextId(++nextId);
-  }
- 
-  update(existingPerson : Person) : void {
-    const personsData = this.getPersons();
-
-    if (personsData.has(existingPerson.id)) {
-      personsData.set(existingPerson.id, existingPerson);
-      this.setPersons(personsData);
-    }
-  }
-
-  delete(existingPersonId : number) : void {
-    const personsData = this.getPersons();
-
-    personsData.delete(existingPersonId);
-    this.setPersons(personsData);
+  async delete(existingPersonId: string) {
+    const personDocRef = doc(
+      this.firestoreService,
+      'people',
+      existingPersonId
+    ).withConverter(personConverter);
+    return deleteDoc(personDocRef);
   }
 }

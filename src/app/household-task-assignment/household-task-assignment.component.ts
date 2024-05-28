@@ -34,7 +34,9 @@ export class HouseholdTaskAssignmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.allTasks = this.householdTasksService.list();
-    this.allPerons = this.personsService.list();
+    this.personsService
+      .list()
+      .then((result: Person[]) => (this.allPerons = result));
   }
 
   generateRandomTeam() {
